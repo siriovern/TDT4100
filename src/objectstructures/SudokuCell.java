@@ -37,7 +37,7 @@ public class SudokuCell {
 	public String toString(){
 		if (isPredefined && !isCellEmpty()){
 			return "(" +value+ ")";
-		}else if (isConflict()){
+		}else if (isConflict() && !isCellEmpty()){
 			return " "+value+"*";
 		}else {
 			return " "+value+" ";
