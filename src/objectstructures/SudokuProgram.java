@@ -31,8 +31,8 @@ public class SudokuProgram {
 			SudokuCell chosenCell = new SudokuCell(x, y, value, isPredefined);
 
 			board.setCell(chosenCell);
-			board.printBoard();
 			board.updateBoard();
+                  board.printBoard();
 
 			System.out.println("Vil du fortsette (ja/nei) ? ");
 			String continueAnswer = scanner.next();

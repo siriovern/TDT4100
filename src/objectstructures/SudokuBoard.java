@@ -2,6 +2,7 @@ package objectstructures;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +16,7 @@ public class SudokuBoard {
 		board = new ArrayList<List<SudokuCell>>();
 		int count = 0;
 		for (int y = 0; y < 9; y++) {
-			// y viser til radene i brettet. Her legges radene (éndimensjonal
+			// y viser til radene i brettet. Her legges radene (ï¿½ndimensjonal
 			// arraylist) inn i board (todimensjonal arraylist):
 			List<SudokuCell> row = new ArrayList<SudokuCell>();
 			board.add(row);
@@ -23,7 +24,7 @@ public class SudokuBoard {
 				// henter ut ett og ett tall eller punktum fra strengen:
 				char value = numbers.charAt(count++);
 				// her lages cellen, og "isPredefined" settes til true, slik at
-				// det ikke skal gå an å endre på disse tallene
+				// det ikke skal gï¿½ an ï¿½ endre pï¿½ disse tallene
 				SudokuCell cell = new SudokuCell(x, y, value, true);
 				// Her finnes den aktuelle raden i brettet (get(y)), og cellen
 				// som ble laget ovenfor legges inn
@@ -37,10 +38,10 @@ public class SudokuBoard {
 		String boardString = "";
 		for (int y = 0; y < 9; y++) {
 			for (int x = 0; x < 9; x++) {
-				// her hentes én og én celle ut fra brettet
+				// her hentes ï¿½n og ï¿½n celle ut fra brettet
 				SudokuCell sudokuCell = board.get(y).get(x);
 				// her legges cellen inn i strengen "boardstring". toString
-				// hjelper til med å formatere tallet riktig
+				// hjelper til med ï¿½ formatere tallet riktig
 				boardString += sudokuCell.toString();
 			}
 			// legger til linjeskift i slutten av hver rad
@@ -50,17 +51,25 @@ public class SudokuBoard {
 	}
 
 	// denne metoden sjekker om det er flere like tall i en rad eller en
-	// kolonne. Dette sjekkes ved å opprette et HashSet. Hvis lengden av hashSet
+	// kolonne. Dette sjekkes ved ï¿½ opprette et HashSet. Hvis lengden av hashSet
 	// er lik som listen "value" er det ingen duplikater, men om de er ulike
 	// betyr det at det finnes minst to like tall
 	private boolean hasDuplicates(List<Character> value) {
+          Iterator<Character> iter = value.iterator();
+          while(iter.hasNext()){
+            Character next = iter.next();
+            if(!Character.isDigit(next)){
+iter.remove();
+            }
 
+
+          }
 		Set<Character> uniqueNumbers = new HashSet<Character>();
 		for (Character number : value) {
 			if (Character.isDigit(number))
 				uniqueNumbers.add(number);
 		}
-		// returnerer true hvis størrelsen ikke er lik
+		// returnerer true hvis stï¿½rrelsen ikke er lik
 		return uniqueNumbers.size() != value.size();
 	}
 
@@ -78,19 +87,21 @@ public class SudokuBoard {
 		}
 	}
 
-	// printer true hvis både raden, kolonnen og 3x3-kvadrant er gyldig for
+	// printer true hvis bï¿½de raden, kolonnen og 3x3-kvadrant er gyldig for
 	// cellen
 	private boolean isValid(SudokuCell chosenCell) {
-		return isValidRow(chosenCell); 
-//				&& isValidColoumn(chosenCell);
-//				&& isValidQuadrant(chosenCell);
+          boolean validRow = isValidRow(chosenCell);
+          boolean validColoumn = isValidColoumn(chosenCell);
+          boolean validQuadrant = isValidQuadrant(chosenCell);
+return validRow && validColoumn && validQuadrant;
+
 
 	}
 
 	private List<SudokuCell> getQuadrant(int x, int y) {
 		List<SudokuCell> quadrant = new ArrayList<SudokuCell>();
-		int modx = x % 3; // gir 0, 1 el 2
-		int mody = y % 3; // gir 0, 1 el 2
+		int modx = (  x+1) % 3; // gir 0, 1 el 2
+		int mody = (y+1) % 3; // gir 0, 1 el 2
 
 		List<Integer> xList = new ArrayList<Integer>();
 		xList.add(x);
@@ -134,11 +145,12 @@ public class SudokuBoard {
 	private boolean isValidQuadrant(SudokuCell chosenCell) {
 		int x = chosenCell.getX();
 		int y = chosenCell.getY();
-		List<Character> quadrant = new ArrayList<Character>();
-		for (SudokuCell cell : getQuadrant(x, y)) {
-			quadrant.add(cell.getValue());
+		List<Character> valuesQuadrant = new ArrayList<Character>();
+          List<SudokuCell> cellsQuadrant = getQuadrant(x, y);
+          for (SudokuCell cell : cellsQuadrant) {
+			valuesQuadrant.add(cell.getValue());
 		}
-		return !hasDuplicates(quadrant);
+		return !hasDuplicates(valuesQuadrant);
 	}
 
 	private List<SudokuCell> getColoumn(int x) {
@@ -180,7 +192,7 @@ public class SudokuBoard {
 
 		// sjekker verdien i cellen spilleren har valgt. Hvis cellen er tom
 		// eller den inneholder et tall som spilleren selv har satt inn blir den
-		// nye verdien spilleren ønsker at skal settes inn satt inn i cellen
+		// nye verdien spilleren ï¿½nsker at skal settes inn satt inn i cellen
 		SudokuCell oldCell = board.get(y).get(x);
 		if (oldCell.isCellEmpty()
 				|| (!oldCell.isCellEmpty() && !oldCell.isPredefined()))
