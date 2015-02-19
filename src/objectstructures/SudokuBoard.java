@@ -81,9 +81,7 @@ public class SudokuBoard {
 	// printer true hvis både raden, kolonnen og 3x3-kvadrant er gyldig for
 	// cellen
 	private boolean isValid(SudokuCell chosenCell) {
-		return isValidRow(chosenCell); 
-//				&& isValidColoumn(chosenCell);
-//				&& isValidQuadrant(chosenCell);
+		return isValidRow(chosenCell) && isValidColoumn(chosenCell) && isValidQuadrant(chosenCell);
 
 	}
 
